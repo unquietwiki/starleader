@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 """
 starleader: Michael Adams; unquietwiki.com; December 2020
 Organized entry of STAR Response Method into Amazon(TM) Leadership Practices
