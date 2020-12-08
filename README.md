@@ -24,7 +24,7 @@ starleader is my attempt to do two things...
 
 ## Disclaimers
 
-***WIP: Dec 7, 2020; data saves to JSON, but doesn't read back correctly. Still want to do an HTML or PDF export too.***
+***WIP: Dec 8, 2020; data saves & loads via JSON. Still want to do an HTML or PDF export too.***
 
 1. This isn't an Amazon tool.
 2. I can't guarantee this will get any of us a job.
