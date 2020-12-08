@@ -14,7 +14,7 @@ Not official Amazon software; written as a tool to help myself with interviews.
 import PySimpleGUI as sg
 import json
 from json import JSONEncoder, JSONDecoder
-from types import SimpleNamespace as Namespace
+from collections import namedtuple
 
 # === Define data to collect ===
 
@@ -99,6 +99,27 @@ class DataHandler:
     def __init__(self):
         self.fileName = "starleader.json"
 
+    # JSON decoder
+    def jsonDecode(self, dataDict):
+        return namedtuple('X', dataDict.keys())(*dataDict.values())
+
+    # Attempt to load JSON file
+    def load(self):
+        try:
+            curRow = 0
+            dataBlobs = []
+            with open(self.fileName, 'r') as jsonFile:
+                jsonStrings = jsonFile.readlines()
+                for jsonElement in jsonStrings:
+                    curRow = curRow + 1
+                    if (curRow > 1) and (curRow < 16):
+                        dataBlobs.append(json.loads(
+                            jsonElement, object_hook=self.jsonDecode))
+            return dataBlobs
+        except:
+            return getLeadershipPrinciples()
+
+    # Attempt to format & save JSON file
     def save(self, sourceData):
         try:
             fileToSave = []
@@ -123,7 +144,8 @@ class DataHandler:
 
 sg.theme('Material2')
 standardFont = 'Arial 12'
-leadershipPrinciples = getLeadershipPrinciples()
+# leadershipPrinciples = getLeadershipPrinciples()
+leadershipPrinciples = DataHandler().load()
 
 for principle in leadershipPrinciples:
     # Variable fields
