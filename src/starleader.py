@@ -13,20 +13,19 @@ Not official Amazon software; written as a tool to help myself with interviews.
 
 import PySimpleGUI as sg
 import json
-from json import JSONEncoder, JSONDecoder
-from collections import namedtuple
+from json import JSONEncoder
 
 # === Define data to collect ===
 
 
 class LeadershipPractice:
-    def __init__(self, name, description):
+    def __init__(self, name, description, situation="", task="", actions="", result=""):
         self.name = name
         self.description = description
-        self.situation = ""
-        self.task = ""
-        self.actions = ""
-        self.result = ""
+        self.situation = situation
+        self.task = task
+        self.actions = actions
+        self.result = result
 
     def setSituation(self, value):
         self.situation = value
@@ -99,22 +98,16 @@ class DataHandler:
     def __init__(self):
         self.fileName = "starleader.json"
 
-    # JSON decoder
-    def jsonDecode(self, dataDict):
-        return namedtuple('X', dataDict.keys())(*dataDict.values())
-
     # Attempt to load JSON file
     def load(self):
         try:
-            curRow = 0
             dataBlobs = []
             with open(self.fileName, 'r') as jsonFile:
-                jsonStrings = jsonFile.readlines()
-                for jsonElement in jsonStrings:
-                    curRow = curRow + 1
-                    if (curRow > 1) and (curRow < 16):
-                        dataBlobs.append(json.loads(
-                            jsonElement, object_hook=self.jsonDecode))
+                jsonData = json.load(jsonFile)
+                # The "properly formatted JSON" likes having a master block, so we need to account for that
+                for blob in jsonData["LeadershipPractice"]:
+                    dataBlobs.append(LeadershipPractice(
+                        blob['name'],blob['description'],blob['situation'],blob['task'],blob['actions'],blob['result']))
             return dataBlobs
         except:
             return getLeadershipPrinciples()
